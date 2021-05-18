@@ -5,8 +5,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.example.demo.exceptions.SellerNotFoundException;
-import com.example.demo.exceptions.UserNotFoundException;
+import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.model.Seller;
 import com.example.demo.model.User;
 
@@ -24,14 +23,14 @@ public class UsersManager {
 
 	public Seller getSeller(@NonNull final String sellerId) {
 		if (!sellers.containsKey(sellerId)) {
-			throw new SellerNotFoundException();
+			throw new ResourceNotFoundException("Seller with ID:" + sellerId + " not found");
 		}
 		return sellers.get(sellerId);
 	}
 
 	public User getUser(@NonNull final String userId) {
 		if (!users.containsKey(userId)) {
-			throw new UserNotFoundException();
+			throw new ResourceNotFoundException("User with ID:" + userId + " not found");
 		}
 		return users.get(userId);
 	}

@@ -4,8 +4,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.exceptions.InvalidProductCategoryException;
-import com.example.demo.exceptions.ProductAlreadyExistsException;
+import com.example.demo.exceptions.ResourceAlreadyExistsException;
+import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.manager.UsersManager;
 import com.example.demo.model.Product;
 import com.example.demo.model.ProductCategory;
@@ -27,12 +27,12 @@ public class SellerServiceImpl implements SellerService {
 			final ProductCategory prodCategory, final int qty, final String sellerId) {
 		Seller seller = usersManager.getSeller(sellerId);
 		if (!productService.checkIfProductCategoryExists(prodCategory)) {
-			throw new InvalidProductCategoryException();
+			throw new ResourceNotFoundException("Product Category:" + prodCategory + " is invalid");
 		}
 		Product product = new Product(productId, productName, prodCategory, price, qty);
 		seller.addProduct(product);
 		if (products.containsKey(productId))
-			throw new ProductAlreadyExistsException();
+			throw new ResourceAlreadyExistsException("Product with ID:" + productId + " not found");
 		products.put(productId, product);
 		return product;
 	}

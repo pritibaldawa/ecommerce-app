@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.exceptions.SellerAlreadyExistsException;
+import com.example.demo.exceptions.ResourceAlreadyExistsException;
 import com.example.demo.manager.UsersManager;
 import com.example.demo.model.Product;
 import com.example.demo.model.Seller;
@@ -66,7 +66,7 @@ public class SellerController {
 	public ResponseEntity<Seller> addSeller(@RequestBody SellerRequest sellerRequest) {
 		Seller seller = new Seller(sellerRequest.getSellerId(), sellerRequest.getAccDetails());
 		if (sellers.containsKey(sellerRequest.getSellerId()))
-			throw new SellerAlreadyExistsException();
+			throw new ResourceAlreadyExistsException("Seller with ID:" + sellerRequest.getSellerId() + " not found");
 		userManager.sellers.put(sellerRequest.getSellerId(), seller);
 		return ResponseEntity.ok(seller);
 	}

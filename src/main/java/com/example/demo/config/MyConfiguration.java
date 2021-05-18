@@ -24,7 +24,7 @@ public class MyConfiguration {
 	Product p4 = new Product("456", "Study Table", ProductCategory.FURNITURE, 999.0, 10);
 	Product p5 = new Product("789", "JBL earphones", ProductCategory.ELECTRONICS, 6000.0, 15);
 
-	@Bean
+	@Bean(name="products")
 	public Map<String, Product> products() {
 		Map<String, Product> products = new HashMap<>();
 		products.put("123", p1);
@@ -36,7 +36,7 @@ public class MyConfiguration {
 		return products;
 	}
 
-	@Bean
+	@Bean(name="sellers")
 	public Map<String, Seller> sellers() {
 		Map<String, Seller> sellers = new HashMap<>();
 		sellers.put("111", new Seller("111", new Account("CloudTail Retailers", "cretailers@gmail.com", "password"),
@@ -49,7 +49,7 @@ public class MyConfiguration {
 		return sellers;
 	}
 
-	@Bean
+	@Bean(name="users")
 	public Map<String, User> users() {
 		Map<String, User> users = new HashMap<>();
 		users.put("101", new User("101", new Account("John Mathews", "john@gmail.com", "password")));

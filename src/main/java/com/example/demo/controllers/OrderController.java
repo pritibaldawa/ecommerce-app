@@ -34,7 +34,8 @@ public class OrderController {
 	}
 
 	@GetMapping(value = "/orders")
-	public ResponseEntity<List<Order>> fetchOrderHistory(@RequestParam(required = true) String userId) {
-		return ResponseEntity.ok(orderService.fetchOrderHistory(userId));
+	public ResponseEntity fetchOrderHistory(@RequestParam(required = true) String userId) {
+		List<Order> orders = orderService.fetchOrderHistory(userId);
+		return (orders.isEmpty()) ? ResponseEntity.ok("No past orders") : ResponseEntity.ok(orders);
 	}
 }

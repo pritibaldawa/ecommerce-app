@@ -9,9 +9,9 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.exceptions.CartNotFoundException;
-import com.example.demo.exceptions.ProductNotFoundException;
+import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.manager.ProductsManager;
+import com.example.demo.manager.UsersManager;
 import com.example.demo.model.Item;
 import com.example.demo.model.Product;
 import com.example.demo.model.ShoppingCart;
@@ -25,11 +25,11 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
 	private Map<String, ShoppingCart> shoppingCarts = new HashMap<>();
 	private ProductsManager productsManager;
-	@Autowired
-	Map<String, User> users;
+	private UsersManager usersManager;
 
-	public ShoppingCartServiceImpl(ProductsManager productsManager) {
+	public ShoppingCartServiceImpl(ProductsManager productsManager, UsersManager usersManager) {
 		this.productsManager = productsManager;
+		this.usersManager = usersManager;
 	}
 
 	@Override
@@ -44,7 +44,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 	public Item createCartItem(@NonNull String productId, int qty) {
 		Product product = productsManager.getProduct(productId);
 		if (product == null)
-			throw new ProductNotFoundException();
+			throw new ResourceNotFoundException("Product with ID: " + productId + " Not Found");
 		// List<Product> products =
 		// productIds.stream().map(productsManager::getProduct).collect(Collectors.toList());
 		Item item = new Item(product, qty);
@@ -68,7 +68,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 			cart = new ShoppingCart(cartId, Arrays.asList(item), qty, item.getProduct().getPrice() * qty);
 		}
 		shoppingCarts.put(userId, cart);
-		users.get(userId).setCart(cart);
+		usersManager.getUser(userId).setCart(cart);
 		return cart;
 	}
 

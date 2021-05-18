@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.demo.exceptions.CartOrderMismatchException;
 import com.example.demo.exceptions.InvalidStateException;
-import com.example.demo.exceptions.NoItemsInCartToPlaceOrderException;
+import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.exceptions.UserNotLoggedInException;
 import com.example.demo.manager.UsersManager;
 import com.example.demo.model.Order;
@@ -14,7 +14,6 @@ import com.example.demo.model.OrderStatus;
 import com.example.demo.model.ShoppingCart;
 import com.example.demo.model.User;
 import com.example.demo.services.OrderService;
-import com.example.demo.services.PaymentService;
 import com.example.demo.services.ShoppingCartService;
 
 import lombok.NonNull;
@@ -39,7 +38,7 @@ public class OrderServiceImpl implements OrderService {
 	public Order createOrder(@NonNull String userId) {
 		ShoppingCart cart = cartService.getCart(userId);
 		if (cart.getCartId() == null)
-			throw new NoItemsInCartToPlaceOrderException();
+			throw new ResourceNotFoundException("No items present in the cart to place order");
 		User user = usersManager.getUser(userId);
 		if (user == null)
 			throw new UserNotLoggedInException();
