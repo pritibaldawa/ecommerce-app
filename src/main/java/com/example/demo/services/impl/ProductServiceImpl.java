@@ -47,16 +47,20 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public List<Product> getProductByCategory(String categoryName) {
 		List<Product> result = new ArrayList<Product>();
+		if (!checkIfProductCategoryExists(categoryName))
+			throw new ResourceNotFoundException(
+					"Product category :" + categoryName + " is either invalid or does not exist!");
+
 		for (Product prod : products.values()) {
-			if (prod.getProductCategory() == (ProductCategory.valueOf(categoryName.toUpperCase())))
+			if (prod.getProductCategory().name().equals(categoryName))
 				result.add(prod);
 		}
 		return result;
 	}
 
-	public boolean checkIfProductCategoryExists(ProductCategory prodCategory) {
+	public boolean checkIfProductCategoryExists(String prodCategory) {
 		for (ProductCategory cat : ProductCategory.values()) {
-			if (cat == prodCategory)
+			if (cat.name().equals(prodCategory))
 				return true;
 		}
 		return false;

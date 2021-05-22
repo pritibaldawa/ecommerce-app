@@ -34,7 +34,7 @@ public class ProductController {
 
 	@GetMapping(value = "/products/cat/{name}")
 	public ResponseEntity<List<Product>> getProductByCategory(@PathVariable("name") final String categoryName) {
-		List<Product> products = productService.getProductByCategory(categoryName);
+		List<Product> products = productService.getProductByCategory(categoryName.toUpperCase());
 		return ResponseEntity.ok(products);
 	}
 

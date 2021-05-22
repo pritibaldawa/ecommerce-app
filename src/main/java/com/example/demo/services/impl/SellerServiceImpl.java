@@ -24,15 +24,15 @@ public class SellerServiceImpl implements SellerService {
 
 	@Override
 	public Product createProduct(final String productId, final String productName, final double price,
-			final ProductCategory prodCategory, final int qty, final String sellerId) {
+			final String prodCategory, final int qty, final String sellerId) {
 		Seller seller = usersManager.getSeller(sellerId);
 		if (!productService.checkIfProductCategoryExists(prodCategory)) {
-			throw new ResourceNotFoundException("Product Category:" + prodCategory + " is invalid");
+			throw new ResourceNotFoundException("Product Category:" + prodCategory + " is invalid or does not exist!");
 		}
-		Product product = new Product(productId, productName, prodCategory, price, qty);
+		Product product = new Product(productId, productName, ProductCategory.valueOf(prodCategory), price, qty);
 		seller.addProduct(product);
 		if (products.containsKey(productId))
-			throw new ResourceAlreadyExistsException("Product with ID:" + productId + " not found");
+			throw new ResourceAlreadyExistsException("Product with ID:" + productId + " already exists!");
 		products.put(productId, product);
 		return product;
 	}
